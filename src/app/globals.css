@@ -1,42 +1,705 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
+/***************************GERAIS*****************************/
+/**************************************************************/
 * {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+:root {
+    --blue: #287bff;
+    --white: #fff;
+    --light-blue: #03a9f4;
+    --grey: #f5f5f5;
+    --black1: #222;
+    --black2: #999;
+    --yellow: #f8b300;
+    --dark-yellow: #c77000;
+
+
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/***************************NAVEGAÇÃO*****************************/
+/**************************************************************/
+.container {
+    position: relative;
+    width: 100%;
+}
+
+.navigation {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: var(--blue);
+    border-left: 10px solid var(--blue);
+    transition: 0.5s;
+    overflow: hidden;
+}
+
+.navigation.active {
+    width: 80px;
+}
+
+.navigation ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.navigation ul li {
+    position: relative;
+    width: 100%;
+    list-style: none;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.navigation ul li:hover,
+.navigation ul li.hovered {
+    background: var(--white);
+}
+
+.navigation ul li:nth-child(1) {
+    margin-bottom: 40px;
+    pointer-events: none;
+}
+
+.navigation ul li:nth-child(1):hover {
+    background: transparent;
+}
+
+.navigation ul li a{
+    position: relative;
+    display: block;
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: var(--white);
+    padding: 0 10px;
+}
+
+.navigation ul li:hover a::before,
+.navigation ul li.hovered a::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -50px;
+    width: 50px;
+    height: 50px;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: 35px 35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+.navigation ul li:hover a::after,
+.navigation ul li.hovered a::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    height: 50px;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: 35px -35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+.navigation ul li:hover a,
+.navigation ul li.hovered a {
+    color: var(--blue);
+}
+
+.navigation ul li a .icon img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.navigation ul li a .icon {
+    position: relative;
+    display: block;
+    min-width: 44px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+}
+
+.navigation ul li a .icon .fa {
+    color: var(--yellow);
+    font-size: 30px;
+}
+
+.navigation ul li:hover a .icon .fa {
+    color: var(--blue);
+}
+
+.navigation ul li a .title {
+    position: relative;
+    display: block;
+    padding: 0 10px;
+    left: 20px;
+    height: 60px;
+    line-height: 59px;
+    white-space: nowrap;
+}
+
+.icon-nav {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.icon-nav .fa-caret-down {
+    font-size: 19px;
+    color: var(--yellow);
+}
+
+.navigation ul li:hover a .icon-nav .fa-caret-down {
+    color: var(--blue);
+}
+
+
+
+
+
+/***************************MAIN*******************************/
+/**************************************************************/
+.main {
+    position: absolute;
+    width: calc(100% - 300px);
+    left: 300px;
+    min-height: 100vh;
+    background: var(--white);
+    transition: 0.5s;
+}
+
+.main.active {
+    width: calc(100% - 60px);
+    left: 60px;
+}
+
+.main .topbar {
+    width: 100%;
+    background: var(--white);
+    height: 60px;
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+}
+
+.toggle::before {
+    content: '\f0c9';
+    font-family: fontAwesome;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    line-height: 60px;
+    font-size: 24px;
+    text-align: center;
+    color: var(--black1);
+}
+
+.search {
+    position: relative;
+    width: 400px;
+    margin: 0 10px;
+}
+
+.search label {
+    position: relative;
+    width: 100%;
+}
+
+.search label input {
+    width: 100%;
+    height: 40px;
+    border-radius: 40px;
+    padding: 5px 20px;
+    padding-left: 35px;
+    font-size: 18px;
+    outline: none;
+    border: 1px solid rgba(0,0,0,0.2);
+}
+
+.search label .fa{
+    position: absolute;
+    left: 15px;
+    top: 4px;
+}
+
+.user {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.user img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/***************************CARDS*******************************/
+/**************************************************************/
+
+.cardBox {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-gap: 20px;
+}
+
+.cardBox .card {
+    position: relative;
+    background: var(--yellow);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    border-radius: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+}
+
+.cardBox .card .numbers {
+    position: relative;
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--blue);
+}
+
+.cardBox .card .cardName {
+    color: var(--light-blue);
+    font-size: 1.1rem;
+    margin-top: 5px;
+}
+
+.cardBox .card .iconBox {
+    font-size: 2rem;
+    color: var(--light-blue);
+}
+
+/***************************GRÁFICOS*******************************/
+/**************************************************************/
+
+.graphBox {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-gap: 30px;
+    min-height: 200px;
+}
+
+.graphBox .box {
+    position: relative;
+    background: var(--white);
+    padding: 20px;
+    width: 100%;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+}
+
+
+/***************************ANIVERSARIANTES*******************************/
+/**************************************************************/
+
+.details {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    padding-top: 0;
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 2fr 1fr;
+}
+
+.details .recentOrders {
+    position: relative;
+    min-height: 530px;
+    background: var(--white);
+    padding: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.details .recentOrders .cardHeader h2 {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.2rem;
+    color: var(--blue);
+}
+
+.btn {
+    position: relative;
+    padding: 5px 10px;
+    background: var(--blue);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.details table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.details table thead td {
+    font-weight: 600;
+}
+
+.details .recentOrders table tr {
+    color: var(--black1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.details .recentOrders table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.details .recentOrders table tbody tr:hover {
+    background: var(--blue);
+    color: var(--white);
+}
+
+.details .recentOrders table tbody tr td span {
+    font-size: 20px;
+    color: var(--black1);
+}
+
+.details .recentOrders table tr td {
+    padding: 9px 5px;
+}
+
+.details .recentOrders table thead tr td:last-child,
+.details .recentOrders table tbody tr td:last-child {
+    text-align: center;
+}
+
+.details .recentOrders table thead tr td:nth-child(2),
+.details .recentOrders table tbody tr td:nth-child(2) {
+    text-align: center;
+    padding-right: 20px;
+}
+
+.details .eventosProximos{
+    position: relative;
+    min-height: 530px;
+    background: var(--white);
+    padding: 20px;
+}
+
+.details .recentOrders .imgbx {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.details .recentOrders .imgbx img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* From Uiverse.io by Smit-Prajapati */ 
+.parent {
+    width: 300px;
+    padding: 20px;
+    perspective: 1000px;
   }
+  
+  .card {
+    padding-top: 50px;
+    /* border-radius: 10px; */
+    border: 3px solid rgb(255, 255, 255);
+    transform-style: preserve-3d;
+    background: linear-gradient(135deg,#0000 18.75%,#f3f3f3 0 31.25%,#0000 0),
+        repeating-linear-gradient(45deg,#f3f3f3 -6.25% 6.25%,#ffffff 0 18.75%);
+    background-size: 60px 60px;
+    background-position: 0 0, 0 0;
+    background-color: #f0f0f0;
+    width: 100%;
+    box-shadow: rgba(142, 142, 142, 0.3) 0px 30px 30px -10px;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .card:hover {
+    background-position: -100px 100px, -100px 100px;
+    transform: rotate3d(0.5, 1, 0, 30deg);
+  }
+  
+  .content-box {
+    background: rgba(4, 193, 250, 0.732);
+    /* border-radius: 10px 100px 10px 10px; */
+    transition: all 0.5s ease-in-out;
+    padding: 60px 25px 25px 25px;
+    transform-style: preserve-3d;
+  }
+  
+  .content-box .card-title {
+    display: inline-block;
+    color: white;
+    font-size: 25px;
+    font-weight: 900;
+    transition: all 0.5s ease-in-out;
+    transform: translate3d(0px, 0px, 50px);
+  }
+  
+  .content-box .card-title:hover {
+    transform: translate3d(0px, 0px, 60px);
+  }
+  
+  .content-box .card-content {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #f2f2f2;
+    transition: all 0.5s ease-in-out;
+    transform: translate3d(0px, 0px, 30px);
+  }
+  
+  .content-box .card-content:hover {
+    transform: translate3d(0px, 0px, 60px);
+  }
+  
+  .content-box .see-more {
+    cursor: pointer;
+    margin-top: 1rem;
+    display: inline-block;
+    font-weight: 900;
+    font-size: 9px;
+    text-transform: uppercase;
+    color: rgb(7, 185, 255);
+    /* border-radius: 5px; */
+    background: white;
+    padding: 0.5rem 0.7rem;
+    border-radius: 10px;
+    transition: all 0.5s ease-in-out;
+    transform: translate3d(0px, 0px, 20px);
+  }
+  
+  .content-box .see-more:hover {
+    transform: translate3d(0px, 0px, 60px);
+  }
+  
+  .date-box {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    height: 60px;
+    width: 60px;
+    background: white;
+    border: 1px solid rgb(7, 185, 255);
+    /* border-radius: 10px; */
+    padding: 10px;
+    transform: translate3d(0px, 0px, 80px);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 17px 10px -10px;
+  }
+  
+  .date-box span {
+    display: block;
+    text-align: center;
+  }
+  
+  .date-box .month {
+    color: rgb(4, 193, 250);
+    font-size: 9px;
+    font-weight: 700;
+  }
+  
+  .date-box .date {
+    font-size: 20px;
+    font-weight: 900;
+    color: rgb(4, 193, 250);
+  }
+   
+
+/*******************Media query**********************/
+
+@media (max-width: 991px) {
+    
+    .graphBox {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .navigation {
+        left: -300px;
+    }
+
+    .navigation.active {
+        left: 0;
+        width: 300px;
+    }
+
+    .main {
+        width: 100%;
+        left: 0;
+    }
+
+    .main.active {
+        width: calc(100% - 300px);
+        left: 300px;
+    }
+
+    .cardBox {
+        grid-template-columns: repeat(2,1fr);
+    }
+
 }
+
+@media (max-width: 768px) {
+    .details {
+        grid-template-columns: repeat(1,1fr);
+    }
+    
+    .cardHeader h2{
+        font-weight: 600;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cardBox {
+        grid-template-columns: repeat(1,1fr);
+    }
+
+    .cardHeader h2 {
+        font-size: 20px;
+    }
+
+    .details .recentOrders {
+        overflow-x: auto;
+    }
+
+    .details .recentOrders table {
+        width: 600px;
+    }
+
+    .navigation {
+        width: 100%;
+        left: -100%;
+        z-index: 1000;
+    }
+
+    .navigation.active {
+        left: 0;
+        width: 100%;
+    }
+
+    .toggle.active {
+        position: fixed;
+        z-index: 10000;
+        right: 0;
+        left: initial;
+    }
+
+    .toggle.active::before{
+        color: var(--white);
+    }
+
+    .main,
+    .main.active {
+        width: 100%;
+        left: 0;
+    }
+}
+
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+
+
+
+.form-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+}
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.form-container input {
+        width: 100%;
+        height: 40px;
+        border-radius: 10px;
+        padding: 5px 15px;
+        font-size: 16px;
+        outline: none;
+        border: 1px solid rgba(0,0,0,0.2);
+}
+.form-container fieldset {
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 10px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+.form-container legend {
+    padding: 0 10px;
+    font-weight: 600;
+    color: var(--blue);
+}
+.form-actions {
+    display: flex;
+    gap: 10px;
+}
+        .form-container input, .form-container select { width: 100%; height: 40px; border-radius: 10px; padding: 5px 15px; font-size: 16px; outline: none; border: 1px solid rgba(0,0,0,0.2); }
