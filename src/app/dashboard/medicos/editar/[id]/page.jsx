@@ -1,49 +1,60 @@
 import MedicoForm from '@/components/forms/MedicoForm';
-// 1. Importa a função específica do serviço
 import { getMedicoById } from '@/services/medicoService';
+import { cookies } from 'next/headers';
+import { notFound } from 'next/navigation';
 
-// A 'async function getMedico(id)' local e a 'API_BASE_URL' foram removidas.
+// Força a página a ser dinâmica para que o cookies() funcione corretamente
+export const dynamic = 'force-dynamic';
 
-// 2. A Página
 export default async function EditarMedicoPage({ params }) {
-
-  // 3. Aplica a correção do 'await params' que você descobriu
+  // 1. Aguarda os parâmetros da rota (obrigatório no Next.js 15+)
   const { id } = await params;
+
+  // 2. Aguarda e recupera o token dos cookies do lado do servidor
+  const cookieStore = await cookies();
+  const token = cookieStore.get('medcimo.token')?.value;
 
   let medico = null;
   let errorMessage = '';
 
   try {
-    // 4. Chama o serviço (que já tem 'cache: no-store')
-    medico = await getMedicoById(id);
+    // 3. Chama o serviço passando o token para autorizar a busca no backend
+    // Certifique-se de que o medicoService.js aceite o argumento 'token'
+    medico = await getMedicoById(id, token);
   } catch (error) {
     console.error('Erro ao buscar médico:', error);
     errorMessage = error.message;
   }
 
-  // 5. Renderiza a página de erro, se necessário
+  // 4. Se não encontrar o médico ou houver erro de autorização
   if (!medico) {
     return (
-        <div className="details">
-          <h2>Médico não encontrado</h2>
-          <p>A página não conseguiu carregar os dados (ID: {id}).</p>
-          {errorMessage && <p>Erro da API: {errorMessage}</p>}
-        </div>
-    );
-  }
-
-  // 6. Renderiza a página de sucesso
-  return (
       <div className="details">
         <div className="recentOrders" style={{ gridColumn: '1 / -1' }}>
           <div className="cardHeader">
-            <h2 id="form-title">Editar Médico</h2>
+            <h2>Médico não encontrado</h2>
           </div>
-
-          {/* Renderiza o formulário de MÉDICO com os dados */}
-          <MedicoForm initialData={medico} />
-
+          <div style={{ padding: '20px' }}>
+            <p>Não foi possível carregar os dados do médico (ID: {id}).</p>
+            {errorMessage && <p style={{ color: 'red', marginTop: '10px' }}>Motivo: {errorMessage}</p>}
+          </div>
         </div>
       </div>
+    );
+  }
+
+  // 5. Renderiza o formulário com os dados carregados
+  return (
+    <div className="details">
+      <div className="recentOrders" style={{ gridColumn: '1 / -1' }}>
+        <div className="cardHeader">
+          <h2>Editar Médico</h2>
+        </div>
+
+        <div style={{ padding: '20px' }}>
+          <MedicoForm initialData={medico} isEdit={true} />
+        </div>
+      </div>
+    </div>
   );
 }

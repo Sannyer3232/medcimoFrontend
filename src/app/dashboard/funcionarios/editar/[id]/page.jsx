@@ -1,39 +1,38 @@
-// app/dashboard/funcionarios/editar/[id]/page.jsx
-import FuncionarioForm from '@/components/forms/FuncionarioForm';
 import { getFuncionarioById } from '@/services/funcionarioService';
+import FuncionarioForm from '@/components/forms/FuncionarioForm';
+import { cookies } from 'next/headers';
+import { notFound } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
 
 export default async function EditarFuncionarioPage({ params }) {
-    // 👇 Desestrutura o params após resolver a Promise
+    // Em versões recentes do Next.js (15+), params e cookies() devem ser aguardados
     const { id } = await params;
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get('medcimo.token')?.value;
+
     let funcionario = null;
-    let errorMessage = '';
-
     try {
-        funcionario = await getFuncionarioById(id);
+        // Buscamos os dados passando o token explicitamente para autorizar no backend
+        funcionario = await getFuncionarioById(id, token);
     } catch (error) {
-        console.error('Erro ao buscar funcionário:', error);
-        errorMessage = error.message;
+        console.error("Erro ao carregar funcionário:", error.message);
+        // Se der erro 401 ou 404, mostramos a página de não encontrado
+        return notFound();
     }
 
-    if (!funcionario) {
-        return (
-            <div className="details">
-                <h2>Funcionário não encontrado</h2>
-                <p>A página não conseguiu carregar os dados (ID: {id}).</p>
-                {errorMessage && <p>Erro da API: {errorMessage}</p>}
-            </div>
-        );
-    }
+    if (!funcionario) return notFound();
 
     return (
         <div className="details">
             <div className="recentOrders" style={{ gridColumn: '1 / -1' }}>
                 <div className="cardHeader">
-                    <h2 id="form-title">Editar Funcionário</h2>
+                    <h2>Editar Funcionário</h2>
                 </div>
-                <FuncionarioForm initialData={funcionario} />
+                
+                {/* O formulário (Client Component) lidará com as edições */}
+                <FuncionarioForm initialData={funcionario} isEdit={true} />
             </div>
         </div>
     );
